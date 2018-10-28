@@ -9,7 +9,7 @@ class Eng2SqlQuery(object):
     def add_db(self, db_name, table_name):
         from .eng2sql.metadata_gen import DbUtil
         db = DbUtil(self._config.connect_str.format(db_name), table_name, self._config)
-        db.build_metadata()
+        db.build_metadata(self._config.db_synonyms[db_name])
 
     def eng2sql(self, sentence):
         print("Eng2SqlQuery eng2sql")

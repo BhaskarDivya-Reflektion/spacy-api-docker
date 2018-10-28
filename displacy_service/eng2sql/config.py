@@ -8,15 +8,18 @@ class config():
         #self.db_type = 'mysql+mysqldb://'
         self.db_type = 'snowflake://'
 
-        
         # database connect string
         #self.connect_str = 'monty:mypass@localhost/{}?unix_socket=/var/run/mysqld/mysqld.sock'
-        self.connect_str = 'dev_etl_user:PASS@bh95352.us-east-1/RFK_DEV/{}/?warehouse=dev_etl_wh?role=dev_etl_role'
+        self.connect_str = 'bhaskar:PASS@bh95352.us-east-1/RFK_DEV/{}?warehouse=dev_etl_wh?role=dev_etl_role'
 
         # List the databse names in the database server , and the *corresponsing* table names you want to search on
         # For ex: 'imdb' database schema has the 'movies' db
         self.databases = ['ANALYTICS']
+        self.db_synonyms = {'ANALYTICS': 'analytics'}
         self.tables = ['product_analytics']
+        self.synonyms = {'product_analytics': {'domain_name': 'domain name', 'country': 'country',
+                                               #'num_views': 'number of views', 'num_a2c': 'number of a2c', 'num_orders': 'number of orders'
+                                               }}
 
         # staford parser home directory
         self.stanford_parser_home = '/app/stanford-parser-full-2018-10-17/'
@@ -45,4 +48,5 @@ class config():
         # time_high_words = [u'after',u'since']
         # time_low_words = [u'before',u'till']
         self.time_words = [u'after', u'since', u'before', u'till']
-        self.group_words = [u'per', u'for each', u'across', u'grouped by', u'in each', u'seggregated by']
+        self.group_words = [u'per', u'for each', u'across',
+                            u'grouped by', u'in each', u'seggregated by']

@@ -38,8 +38,7 @@ class question_handler():
                     wh_position = p
                     break
             else:
-                print
-                "+ in label!!"
+                print("+ in label!!")
 
         all_leaves_positions = []
         for i in range(len(t.leaves())):
@@ -350,20 +349,17 @@ class value_extractor():
         if not question_check:
             self.query_text = preproc.replace_verb()
             if not self.query_text:
-                print
-                "Use correct verb or question to phrase query!"
+                print("Use correct verb or question to phrase query!")
                 return
 
             qt = self.query_text
             self.W_LIST, self.query_text = preproc.handle_order_by(qt)
 
-            print
-            ">>", self.query_text
+            print(">>", self.query_text)
             doc = self.conf.nlp(self.query_text)
             subj = None
             for w in doc:
-                print
-                w.head, w, w.dep_, w.tag_
+                print(w.head, w, w.dep_, w.tag_)
 
             for w in doc:
                 if w.dep_ == u'ROOT' and w.pos_ != u'VERB':
@@ -397,15 +393,12 @@ class value_extractor():
             self.W_LIST = [x for x in self.W_LIST if x not in self.S_LIST]
 
         else:
-            print
-            ">>", self.query_text
+            print(">>", self.query_text)
             wh_position1, wh_position2, wh_type = qh.question_phrase_extract()
             wh_doc = doc[wh_position1:wh_position2 + 1]
-            print
-            wh_doc, wh_type
+            print(wh_doc, wh_type)
             for w in doc:
-                print
-                w.head, w, w.dep_, w.tag_
+                print(w.head, w, w.dep_, w.tag_)
 
             if doc[0].text.lower() == u'who':
                 subj = None
@@ -501,9 +494,7 @@ class value_extractor():
 
         print("keyword_finder before return")
 
-        print
-        '>>> S >> ', self.S_LIST
-        print
-        '>>> W >> ', self.W_LIST
+        print('>>> S >> ', self.S_LIST)
+        print('>>> W >> ', self.W_LIST)
 
         return self.S_LIST, self.W_LIST

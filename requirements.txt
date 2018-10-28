@@ -1,7 +1,9 @@
 spacy
 falcon
 pytest
+urllib3<1.24,>=1.20
 requests
 SQLAlchemy
+snowflake-sqlalchemy
 nltk
 parsedatetime

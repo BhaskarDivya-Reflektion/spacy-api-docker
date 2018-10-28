@@ -59,8 +59,8 @@ RUN mkdir -p ${SNOWSQL_HOME} \
  && ${SNOWSQL_HOME}/bin/snowsql -v
  #&& rm -f ${SNOWSQL_HOME}/snowsql.bash \
 
-RUN python3.6 -m venv env \
- && env/bin/pip install snowflake-sqlalchemy
+#RUN python3. -m venv env \
+# && env/bin/pip install snowflake-sqlalchemy
 
 COPY snowsql_config.ini ${SNOWSQL_HOME}/config.j2
 COPY config/nginx.conf /app/config/nginx.conf

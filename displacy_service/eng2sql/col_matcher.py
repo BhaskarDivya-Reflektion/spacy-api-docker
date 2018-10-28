@@ -121,8 +121,7 @@ class col_matcher():
                     st += c + ','
                 return st
 
-        print
-        '-- -- ', S_words[0], self.db_synonyms
+        print('-- -- ', S_words[0], self.db_synonyms)
         if len(S_words) == 1 and S_words[0] in self.db_synonyms:
             return '*'
 
@@ -256,8 +255,7 @@ class col_matcher():
         more_w = set(['more', 'after', 'since'])
         less_w = set(['less', 'before', 'till'])
 
-        print
-        ner, sub_phrase
+        print(ner, sub_phrase)
         # print tupl
 
         if more_w.intersection(set([w.lemma_ for w in tupl])) != set([]):
@@ -297,15 +295,13 @@ class col_matcher():
             return utils(self.conf).parse_time(max_col, op, val)
 
         elif ner == 'GPE':
-            print
-            self.types
+            print(self.types)
             str_cols = self.types['STRING']
             if len(str_cols) == 1:
                 col = str_cols[0]
                 return (col, op, val)
             elif len(str_cols) == 0:
-                print
-                'No String Col Found!'
+                print('No String Col Found!')
             else:
                 candidates = str_cols
 
@@ -332,8 +328,7 @@ class col_matcher():
                 col = str_cols[0]
                 return (col, op, val)
             elif len(str_cols) == 0:
-                print
-                'No String Col Found!'
+                print('No String Col Found!')
             else:
                 candidates = str_cols
 
@@ -360,8 +355,7 @@ class col_matcher():
                 col = str_cols[0]
                 return (col, op, val)
             elif len(str_cols) == 0:
-                print
-                'No String Col Found!'
+                print('No String Col Found!')
             else:
                 candidates = str_cols
 
@@ -377,8 +371,7 @@ class col_matcher():
                 col = int_cols[0]
                 return (col, op, val)
             elif len(int_cols) == 0:
-                print
-                'No Int Col Found!'
+                print('No Int Col Found!')
             else:
                 candidates = int_cols
 
@@ -464,14 +457,10 @@ class col_matcher():
             QUERY_3 += ' GROUP BY ' + ','.join(group_cols)
             QUERY_1 += ',' + ','.join(group_cols)
 
-        print
-        ''
-        print
-        ''
-        print
-        'QUERY >>>', QUERY_1 + QUERY_2 + QUERY_3 + QUERY_4
-        print
-        ''
+        print('')
+        print('')
+        print('QUERY >>>', QUERY_1 + QUERY_2 + QUERY_3 + QUERY_4)
+        print('')
 
         done_words = set()
         table = ''

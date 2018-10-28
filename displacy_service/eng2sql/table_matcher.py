@@ -28,6 +28,7 @@ class table_matcher():
 
     def enum_matcher(self):
         # TODO root word matching - ('get states where families purchased umbrella insurance')
+        print("Table Matcher: Enum_matcher enter")
 
         T_LIST = self.W_LIST + self.S_LIST
         for tupl in T_LIST:
@@ -40,10 +41,14 @@ class table_matcher():
             sub_phrase_list.sort(key=lambda x: len(x), reverse=True)
 
             for sub_phrase in sub_phrase_list:
-                phrase = ' '.join(sub_phrase)
+                print("enum_matcher before join")
+                phrase = ' '.join(map(bytes.decode, sub_phrase))
+                print("enum_matcher after join")
                 for k in self.all_enum_columns:
                     if any(s.lower() == phrase for s in self.all_enum_columns[k]):
+                        print("Table Matcher: Enum_matcher returning 1st")
                         return k[0]
+        print("Table Matcher: Enum_matcher returning 2nd")
         return False
 
     def select_clause_matcher(self, S_filtered):
@@ -87,7 +92,8 @@ class table_matcher():
             for db_name in self.conf.databases:
                 filename = self.conf.metadata_base + db_name + '_metadata.pkl'
                 with open(filename, 'rb') as f:
-                    md = pickle.load(f, fix_imports=True, encoding='bytes')
+                    #md = pickle.load(f, fix_imports=True, encoding='bytes')
+                    md = pickle.load(f)
                     print("Table Extractor Pickle load complete")
                     self.all_enum_columns.update(md[1])
                     self.all_synonyms_columns.update(md[2])
@@ -97,13 +103,14 @@ class table_matcher():
 
         else:
             for i in range(len(self.conf.databases)):
-                db = DbUtil(self.conf.connect_str, self.conf.tables[i], self.conf)
-                db.build_metadata('')
+                db = DbUtil(self.conf.connect_str.format(self.conf.databases[i]), self.conf.tables[i], self.conf)
+                db.build_metadata(self.conf.db_synonyms[self.conf.databases[i]])
                 self.all_enum_columns.update(db.enum_columns)
                 self.all_synonyms_columns.update(db.synonyms)
 
                 self.all_synonyms_db[self.conf.databases[i]] = db.db_synonyms
 
+        print("Table Matcher: Metadata loaded")
         tab = self.enum_matcher()
         match_found = bool(tab)
 
@@ -133,8 +140,7 @@ class table_matcher():
             # Word2Vec
             # TODO improve - take out stop words from db word list
             # similarity btwn bag of words, tf-idf, lucene etc
-            print
-            '>> Table Matching using word2vec ...'
+            print('>> Table Matching using word2vec ...')
             # import spacy
             # model = spacy.load('en')
 
@@ -163,6 +169,5 @@ class table_matcher():
 
             tab = self.conf.tables[max_idx]
 
-        print
-        '>>TABLE>>', tab
+        print('>>TABLE>>', tab)
         return tab
