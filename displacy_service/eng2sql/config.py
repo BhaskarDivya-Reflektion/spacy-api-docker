@@ -14,10 +14,10 @@ class config():
 
         # List the databse names in the database server , and the *corresponsing* table names you want to search on
         # For ex: 'imdb' database schema has the 'movies' db
-        self.databases = ['ANALYTICS']
-        self.db_synonyms = {'ANALYTICS': 'analytics'}
+        self.databases = ['analytics']
+        self.db_synonyms = {'analytics': 'analytics'}
         self.tables = ['product_analytics']
-        self.synonyms = {'product_analytics': {'domain_name': 'domain name', 'country': 'country',
+        self.synonyms = {'product_analytics': {'domain_name': 'domain', 'country': 'country',
                                                #'num_views': 'number of views', 'num_a2c': 'number of a2c', 'num_orders': 'number of orders'
                                                }}
 
