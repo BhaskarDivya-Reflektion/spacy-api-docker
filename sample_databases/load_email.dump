@@ -1,0 +1,6 @@
+INSERT INTO `email` VALUES 
+('2017-08-02 19:59:58','Mobile Safari',NULL,'Sunrise',1,'mobile', '196070585', 'disneystore.com','open',NULL,'iOS','not personalized','Florida'),
+('2017-08-02 19:59:56','Apple Mail',NULL,'Halifax',1,'pc', '196070585', 'disneystore.com','click',NULL,'OS X','not personalized','Nova Scotia'),
+('2017-08-02 19:59:55','Apple Mail',NULL,'Mission Viejo',1,'pc', '196070585', 'disneystore.com','open',NULL,'OS X','not personalized','California'),
+('2017-08-02 19:59:51','Outlook 2010',NULL,'--',1,'pc', '196070585', 'disneystore.com','click',NULL,'Windows 7','not personalized','--'),
+('2017-08-02 19:59:48','Mobile Safari',NULL,'Shreveport',1,'mobile', '43081656', 'loft.com','open',NULL,'iOS','not personalized','Louisiana')

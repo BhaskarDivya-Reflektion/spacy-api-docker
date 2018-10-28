@@ -90,3 +90,8 @@ ENV/
 
 frontend/node_modules
 .DS_Store
+
+
+# Stanford Parser
+stanford-parser*/**
+snowsql_config.ini

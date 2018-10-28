@@ -1,0 +1,79 @@
+FROM python:3.6
+LABEL maintainer="Bhaskar Divya"
+LABEL version="0.2"
+LABEL description="Docker image with spacy models and eng2sql API"
+
+# Install the required packages
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libssl-dev \
+    supervisor \
+    curl \
+    nginx \
+    vim-tiny &&\
+    apt-get -q clean -y && rm -rf /var/lib/apt/lists/* && rm -f /var/cache/apt/*.bin
+
+# Install node for the frontend
+#RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
+#  apt-get install -y nodejs &&\
+#  apt-get -q clean -y && rm -rf /var/lib/apt/lists/* && rm -f /var/cache/apt/*.bin
+
+# Copy and set up the app
+COPY Makefile /app/Makefile
+
+COPY requirements.txt /app/requirements.txt
+COPY setup.py /app/setup.py
+RUN cd /app && make clean && make #&& cd /app/frontend && make clean && make
+
+COPY scripts/* /app/scripts/
+ENV languages "en"
+RUN cd /app && env/bin/download_models
+
+# Download stanford parsers
+# wget https://nlp.stanford.edu/software/stanford-parser-full-2018-10-17.zip
+# unzip stanford-parser-full-2018-10-17.zip
+
+ENV JAVA_VERSION=8u171 \
+    JAVA_DEBIAN_VERSION=8u171-b11-1~deb9u1 \
+    CA_CERTIFICATES_JAVA_VERSION=20170531+nmu1
+
+RUN mkdir -p /usr/share/man/man1 \
+ && echo "deb http://http.debian.net/debian stretch main contrib non-free" > /etc/apt/sources.list.d/stretch.list \
+ && apt-get update \
+ && apt-get install -y --no-install-recommends \
+		ca-certificates-java="$CA_CERTIFICATES_JAVA_VERSION" \
+		openjdk-8-jre-headless="$JAVA_DEBIAN_VERSION" \
+    unzip \
+ && rm /etc/apt/sources.list.d/stretch.list \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+
+# Install Snowsql
+ENV BOOTSTRAP_VERSION=1.1 \
+    VERSION=1.1.51 \
+    SNOWSQL_HOME=/app/.snowsql
+
+RUN mkdir -p ${SNOWSQL_HOME} \
+ && curl -o ${SNOWSQL_HOME}/snowsql.bash https://s3-us-west-2.amazonaws.com/sfc-snowsql-updates/bootstrap/${BOOTSTRAP_VERSION}/linux_x86_64/snowsql-${VERSION}-linux_x86_64.bash \
+ && SNOWSQL_DEST=${SNOWSQL_HOME}/bin SNOWSQL_LOGIN_SHELL=/root/.bashrc bash ${SNOWSQL_HOME}/snowsql.bash \
+ && ${SNOWSQL_HOME}/bin/snowsql -v
+ #&& rm -f ${SNOWSQL_HOME}/snowsql.bash \
+
+RUN python3.6 -m venv env \
+ && env/bin/pip install snowflake-sqlalchemy
+
+COPY snowsql_config.ini ${SNOWSQL_HOME}/config.j2
+COPY config/nginx.conf /app/config/nginx.conf
+COPY config/supervisor.conf /app/config/supervisor.conf
+# Configure nginx & supervisor
+RUN mv /app/config/nginx.conf /etc/nginx/sites-available/default &&\
+  echo "daemon off;" >> /etc/nginx/nginx.conf && \
+  mv /app/config/supervisor.conf /etc/supervisor/conf.d/
+
+COPY . /app
+
+ENV PORT 80
+EXPOSE 80
+EXPOSE 8000
+EXPOSE 9001
+CMD ["bash", "/app/start.sh"]

@@ -24,4 +24,4 @@ test: env/bin/python
 	env/bin/py.test displacy_service_tests
 
 start: env/bin/python
-	env/bin/run_server
+	env/bin/run_server 2>&1

@@ -11,8 +11,8 @@ setup(
     license='MIT',
     entry_points={
           'console_scripts': [
-              'download_models = displacy_service.scripts.download:download_models',
-              'run_server = displacy_service.scripts.app:run'
+              'download_models = scripts.download:download_models',
+              'run_server = displacy_service.app:run'
           ]
       }
 )

@@ -2,3 +2,6 @@ spacy
 falcon
 pytest
 requests
+SQLAlchemy
+nltk
+parsedatetime
